@@ -19,10 +19,11 @@ public class User {
     private String password;
     private Boolean active;
 
-    @OneToMany
+    @OneToMany(mappedBy = "creator")
     private List<Task> tasks;
-    @OneToMany
+    @OneToMany(mappedBy = "creator")
     private List<UrgentTask> urgentTasks;
+
     @OneToMany
     private List<Board> boards;
     @OneToMany
