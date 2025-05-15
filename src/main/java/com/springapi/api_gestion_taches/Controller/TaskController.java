@@ -17,14 +17,22 @@ import java.util.Optional;
 @RestController
 public class TaskController {
 
-    TaskRepository TR;
-    UrgentTaskRepository UTR;
-    UserRepository userRepository;
+    private final TaskRepository taskRepository;
+    private final UrgentTaskRepository urgentTaskRepository;
+    private final UserRepository userRepository;
+
+    public TaskController(TaskRepository taskRepository,
+                          UrgentTaskRepository urgentTaskRepository,
+                          UserRepository userRepository) {
+        this.taskRepository = taskRepository;
+        this.urgentTaskRepository = urgentTaskRepository;
+        this.userRepository = userRepository;
+    }
 
     @GetMapping("/tasks/inProgress")
     public ResponseEntity<String> inProgress() {
-
-        return ResponseEntity.ok().body(TR.findByInProgress(true).toString() + UTR.findByInProgress(true).toString());
+        return ResponseEntity.ok().body(taskRepository.findByInProgress(true).toString() +
+                urgentTaskRepository.findByInProgress(true).toString());
     }
 
     @GetMapping("/tasks/inProgress/{userId}")
@@ -32,9 +40,10 @@ public class TaskController {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new RuntimeException("User not found"));
 
-        List<Task> normalTasks = TR.findByCreatorAndInProgress(user, true);
-        List<UrgentTask> urgentTasks = UTR.findByCreatorAndInProgress(user, true);
+        List<Task> normalTasks = taskRepository.findByCreatorAndInProgress(user, true);
+        List<UrgentTask> urgentTasks = urgentTaskRepository.findByCreatorAndInProgress(user, true);
 
         return ResponseEntity.ok().body(List.of(normalTasks, urgentTasks));
     }
 }
+
