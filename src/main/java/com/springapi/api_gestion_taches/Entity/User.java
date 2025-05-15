@@ -22,6 +22,8 @@ public class User {
     @OneToMany
     private List<Task> tasks;
     @OneToMany
+    private List<UrgentTask> urgentTasks;
+    @OneToMany
     private List<Board> boards;
     @OneToMany
     private List<Comment> comments;

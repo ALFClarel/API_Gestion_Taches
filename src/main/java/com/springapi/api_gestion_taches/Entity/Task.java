@@ -13,13 +13,25 @@ public class Task {
     private Long id;
     private String name;
     private Date creationDate;
-    private Boolean inProgress;
+    protected Boolean inProgress;
     private Boolean completed;
+
+    @ManyToOne
+    @JoinColumn(name = "creator_id")
+    protected User creator;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Label labels;
     @OneToMany(cascade = CascadeType.ALL)
     private List<Comment> comments;
+
+    public User getCreator() {
+        return creator;
+    }
+
+    public void setCreator(User creator) {
+        this.creator = creator;
+    }
 
     public void setId(Long id) {
         this.id = id;
